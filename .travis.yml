@@ -1,0 +1,13 @@
+language: go
+
+install:
+  - go get github.com/golang/lint/golint
+  - go get github.com/dgrijalva/jwt-go
+
+script:
+  - go vet ./...
+  - go test -v ./...
+  - '[ -z "$(golint ./...)" ]'
+
+go:
+  - 1.8.x
