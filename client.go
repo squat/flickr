@@ -20,7 +20,9 @@ const (
 	AuthorizeURL = "https://www.flickr.com/services/oauth/authorize"
 	// RequestTokenURL is the Flickr API endpoint for requesting OAuth request tokens.
 	RequestTokenURL = "https://www.flickr.com/services/oauth/request_token"
-	letters         = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	// UploadURL is the Flickr API endpoint for uploading photos.
+	UploadURL = "https://up.flickr.com/services/upload/"
+	letters   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 )
 
 // NewClient creates a new flickr client.
@@ -60,6 +62,13 @@ func (c *Client) Sign(r *request, tokenSecret string) {
 	// ensure we do not sign a signature.
 	r.params.Del("oauth_signature")
 	r.params.Set("oauth_signature", signature)
+}
+
+// SignOAuth creates a HMAC-SHA1 signature for an OAuth request and adds it to the request parameters.
+func (c *Client) SignOAuth(r *request, at *AccessToken) {
+	r.params.Set("oauth_token", at.OAuthToken)
+	r.params.Set("oauth_consumer_key", c.APIKey)
+	c.Sign(r, at.OAuthTokenSecret)
 }
 
 // GetRequestToken begins the OAuth flow by getting a request token from Flickr.
