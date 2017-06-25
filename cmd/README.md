@@ -12,12 +12,11 @@ In order to obtain credentials, [register an app with Flickr](https://www.flickr
 The example application expects four flags:
 * `--api-key`: the API key provided by Flickr
 * `--api-secret`: the API secret provided by Flickr
-* `--callback-url`: the OAuth callback URL for this app; this example expects `http://localhost:5000/auth/callback`
-* `--signing-key`: a key to sign JWTs, e.g. `keyboardcat`
+* `--port`: the port at which to run this app; defaults to `5000`
 
 Start the app like so:
 ```go
-go run cmd/example.go --api-key=<flickr-key> --api-secret=<flickr-secret> --callback-url=http://localhost:5000/auth/callback --signing-key=keyboardcat
+go run cmd/example.go --api-key=<flickr-key> --api-secret=<flickr-secret>
 ```
 
 Navigate a browser to `http://localhost:5000/auth/login` to login and test the example app.

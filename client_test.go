@@ -10,11 +10,11 @@ import (
 )
 
 func TestNewClient(t *testing.T) {
-	c := NewClient("", "", "", []byte{})
+	c := NewClient("", "", "")
 	if c.client == nil {
 		t.Errorf("expected default request to allocate 'client'")
 	}
-	c = NewClient("key", "secret", "callback", []byte("signing key"))
+	c = NewClient("key", "secret", "callback")
 	if c.APIKey != "key" {
 		t.Errorf("expected client key to be %q, got %q", "key", c.APIKey)
 	}
@@ -23,9 +23,6 @@ func TestNewClient(t *testing.T) {
 	}
 	if c.Callback != "callback" {
 		t.Errorf("expected client callback to be %q, got %q", "callback", c.Callback)
-	}
-	if string(c.SigningKey) != "signing key" {
-		t.Errorf("expected client signing key to be %q, got %q", "signing key", string(c.SigningKey))
 	}
 }
 

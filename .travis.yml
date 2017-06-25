@@ -2,7 +2,6 @@ language: go
 
 install:
   - go get github.com/golang/lint/golint
-  - go get github.com/dgrijalva/jwt-go
 
 script:
   - go vet ./...

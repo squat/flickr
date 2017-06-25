@@ -26,23 +26,21 @@ const (
 )
 
 // NewClient creates a new flickr client.
-func NewClient(key, secret, callback string, signingKey []byte) *Client {
+func NewClient(key, secret, callback string) *Client {
 	return &Client{
-		APIKey:     key,
-		APISecret:  secret,
-		Callback:   callback,
-		client:     &http.Client{},
-		SigningKey: signingKey,
+		APIKey:    key,
+		APISecret: secret,
+		Callback:  callback,
+		client:    &http.Client{},
 	}
 }
 
 // Client is the primary type used to interact with the Flickr API.
 type Client struct {
-	APIKey     string
-	APISecret  string
-	Callback   string
-	client     *http.Client
-	SigningKey []byte
+	APIKey    string
+	APISecret string
+	Callback  string
+	client    *http.Client
 }
 
 // RequestToken represents a Flick OAuth request token.
