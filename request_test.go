@@ -2,10 +2,8 @@ package flickr
 
 import (
 	"fmt"
-	"net/http"
 	"net/url"
 	"testing"
-	"time"
 )
 
 func TestGenerateNonce(t *testing.T) {
@@ -21,25 +19,15 @@ func TestGenerateNonce(t *testing.T) {
 }
 
 func TestNewRequest(t *testing.T) {
-	r := newRequest(nil)
+	r := newRequest()
 	if r.params == nil {
 		t.Errorf("expected default request to allocate 'params'")
-	}
-	if r.client == nil {
-		t.Errorf("expected default request to allocate 'client'")
 	}
 	if r.verb != "GET" {
 		t.Errorf("expected default request verb to be %s, got %s", "GET", r.verb)
 	}
 	if r.endpoint != APIURL {
 		t.Errorf("expected default request endpoint to be %s, got %s", APIURL, r.endpoint)
-	}
-	client := &http.Client{
-		Timeout: 5 * time.Second,
-	}
-	r = newRequest(client)
-	if r.client != client {
-		t.Errorf("expected request 'client' to be %v, got %v", client, r.client)
 	}
 }
 
@@ -62,7 +50,7 @@ func TestGetSignatureBaseString(t *testing.T) {
 		},
 	}
 	for i, c := range cases {
-		r := newRequest(nil)
+		r := newRequest()
 		r.endpoint = c.endpoint
 		r.verb = c.verb
 		nonce := r.params.Get("oauth_nonce")

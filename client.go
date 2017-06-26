@@ -71,13 +71,13 @@ func (c *Client) SignOAuth(r *request, at *AccessToken) {
 
 // GetRequestToken begins the OAuth flow by getting a request token from Flickr.
 func (c *Client) GetRequestToken() (*RequestToken, error) {
-	r := newRequest(c.client)
+	r := newRequest()
 	r.endpoint = RequestTokenURL
 	r.params.Set("oauth_consumer_key", c.APIKey)
 	r.params.Set("oauth_callback", url.QueryEscape(c.Callback))
 	// we don't have token secret at this stage, pass an empty string
 	c.Sign(r, "")
-	res, err := r.client.Get(r.getURL())
+	res, err := c.client.Get(r.getURL())
 	if err != nil {
 		return nil, fmt.Errorf("failed to make request token request: %v", err)
 	}
@@ -122,13 +122,13 @@ type AccessToken struct {
 // GetAccessToken finishes the OAuth flow by exchanging a verifier
 // for an OAuth access token from Flickr.
 func (c *Client) GetAccessToken(rt *RequestToken, verifier string) (*AccessToken, error) {
-	r := newRequest(c.client)
+	r := newRequest()
 	r.endpoint = AccessTokenURL
 	r.params.Set("oauth_consumer_key", c.APIKey)
 	r.params.Set("oauth_token", rt.OAuthToken)
 	r.params.Set("oauth_verifier", verifier)
 	c.Sign(r, rt.OAuthTokenSecret)
-	res, err := r.client.Get(r.getURL())
+	res, err := c.client.Get(r.getURL())
 	if err != nil {
 		return nil, fmt.Errorf("failed to make access token request: %v", err)
 	}
@@ -161,7 +161,7 @@ func parseAccessToken(res string) (*AccessToken, error) {
 
 // GetAuthorizeURL produces a new authorization URL.
 func (c *Client) GetAuthorizeURL(token, permissions string) string {
-	r := newRequest(c.client)
+	r := newRequest()
 	r.endpoint = AuthorizeURL
 	r.params.Set("oauth_token", token)
 	r.params.Set("perms", permissions)

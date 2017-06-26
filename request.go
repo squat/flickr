@@ -3,7 +3,6 @@ package flickr
 import (
 	"fmt"
 	"math/rand"
-	"net/http"
 	"net/url"
 	"strings"
 	"time"
@@ -11,18 +10,13 @@ import (
 
 type request struct {
 	endpoint string
-	client   *http.Client
 	verb     string
 	params   *url.Values
 }
 
-func newRequest(client *http.Client) *request {
-	if client == nil {
-		client = &http.Client{}
-	}
+func newRequest() *request {
 	return &request{
 		endpoint: APIURL,
-		client:   client,
 		verb:     "GET",
 		params: &url.Values{
 			"oauth_version":          []string{"1.0"},

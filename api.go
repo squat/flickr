@@ -43,9 +43,7 @@ type UploadResult struct {
 
 // Upload POSTs the photo bytes from the provided reader to Flickr.
 func (c *Client) Upload(re io.Reader, name string, at *AccessToken) (*UploadResult, error) {
-	r := newRequest(&http.Client{Transport: &http.Transport{
-		TLSNextProto: make(map[string]func(authority string, c *tls.Conn) http.RoundTripper),
-	}})
+	r := newRequest()
 	r.endpoint = UploadURL
 	r.verb = "POST"
 	c.SignOAuth(r, at)
@@ -78,7 +76,12 @@ func (c *Client) Upload(re io.Reader, name string, at *AccessToken) (*UploadResu
 	}
 	req.Header.Set("content-type", writer.FormDataContentType())
 	req.ContentLength = -1
-	resp, err := r.client.Do(req)
+	client := new(http.Client)
+	*client = *c.client
+	client.Transport = &http.Transport{
+		TLSNextProto: make(map[string]func(authority string, c *tls.Conn) http.RoundTripper),
+	}
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make request to upload URL: %v", err)
 	}
